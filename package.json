@@ -1,0 +1,33 @@
+{
+  "name": "nodevue",
+  "version": "0.0.0",
+  "description": "the sample project for nodejs, vue and mysql",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ds5gre/nodevue.git"
+  },
+  "keywords": [
+    "node",
+    "vue"
+  ],
+  "author": "Junsoo KIM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ds5gre/nodevue/issues"
+  },
+  "homepage": "https://github.com/ds5gre/nodevue#readme",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.0",
+    "crypto-js": "^4.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "hashmap": "^2.4.0",
+    "mysql": "^2.18.1",
+    "open-graph-scraper": "^4.8.2"
+  }
+}
