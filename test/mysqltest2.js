@@ -1,7 +1,7 @@
 const { executionAsyncResource } = require('async_hooks');
 const { pathToFileURL } = require('url');
-const util  = require('util'),
-      Promise = require('bluebird');
+const util = require('util'),
+    Promise = require('bluebird');
 
 const Pool = require('../pool');
 
@@ -10,31 +10,30 @@ const sql2 = "select count(*) from time_zone";
 
 const pool = new Pool();
 
-Promise.using( pool.connect(), conn => {
-    conn.beginTransaction( txerr => {
 
-        Promise.all([
-            conn.queryAsync(sql1),
-            conn.queryAsync(sql2)
-        ]).then (r => {
-            for (let i=0; i<r.length; i++)
-            console.log(`sql${i+1}=`, r[i]);
-            conn.commit();
-            pool.end();
-        }).catch( e => {
-            conn.rollback();
-            pool.end();
-        });
-    });
-});
+// execute(conn => {
+//     Promise.all([
+//         conn.queryAsync(sql1),
+//         conn.queryAsync(sql2)
+//     ]).then(r => {
+//         for (let i = 0; i < r.length; i++)
+//             console.log(`sql${i + 1}=`, r[i]);
+//         conn.commit();
+//         pool.end();
+//     }).catch(e => {
+//         conn.rollback();
+//         pool.end();
+//     });
+// })
 
-function execut(fn){
-    Promise.using( pool.connect(), conn => {
-        conn.beginTransaction( txeer => {
-            fn(conn);
-        });
-    });
-}
+// function execute(fn) {
+//     Promise.using(pool.connect(), conn => {
+//         conn.beginTransaction(txeer => {
+//             fn(conn);
+//         });
+//     });
+// }
+
 // Promise.using( pool.connect(), conn => {
 //     Promise.all([
 
@@ -58,7 +57,7 @@ function execut(fn){
 //         .catch( err => {
 //             console.log("err>>", err);
 //         });
-    
+
 //     pool.end();
 // });
 
