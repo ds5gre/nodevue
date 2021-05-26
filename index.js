@@ -40,3 +40,31 @@ const server = app.listen(3000, function(){
 	console.log("Express's started on port 3000");
 });
 
+const io = require('socket.io')(server, {
+	log: false,
+	origins: '*:*',
+	pingInterval: 3000,
+	pingTimeout: 5000
+});
+
+io.sockets.on('connection', (socket, opt) => {
+	socket.emit('message', {msg: 'Welcome ' + socket.id});
+
+	socket.on('join', function(roomId, fn) {
+		socket.join(roomId, function(){
+			console.log("Join", roomId, Object.keys(socket.rooms));
+		});
+	});
+
+	socket.on('leave', function(roomId, fn) {
+		socket.leave(roomId);
+	});
+
+	socket.on('message', (data, fn) => {
+		console.log("message>>", data.msg, Object.keys(socket.rooms));
+	});
+
+	socket.on('disconnecting', function(roomId, fn) {
+		console.log("disconnecting>>", socket.id);
+	});
+});
