@@ -1,13 +1,14 @@
 const Promise = require('bluebird');
 
-const Pool = require('./pool');
-
-module.exports = {
+module.exports = class {
+    constructor(pool) {
+        this.pool = pool;
+    }
     execute(fn){
-        Promise.using( pool.connection(), conn =>{
+        Promise.using( this.pool.connect(), conn =>{
             fn(conn);
         });
-    },
+    }
 
     excuteTx(fn) {
         Promise.using( pool.connect(), conn =>{
