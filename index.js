@@ -1,48 +1,26 @@
-const express = require('express'), 
-      app = express();
+var express = require('express');
+var socket = require('socket.io');
 
-const Pool = require('./pool'),
-	  Mydb = require('./mydb');
+//app setup
+var app = express();
+var server = app.listen(3000, function(){
+	console.log('listening to requests on port 3000!!')
+});
 
-const testJson = require('./test/test.json');
-
-const pool = new Pool();
-
+//Static files
 app.use(express.static('public'));
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
-app.engine('html', require('ejs').renderFile);
 
-// app.get('/', (req, res) => {
-// //	res.send("<h1>Hello NodeJS !!</h1>");
-// //	res.json(testJson);
-// 	res.render('index', {name:'kim'});
-// });
+//Socket setup
+var io = socket(server);
 
-app.get('/test/:email', (req, res) => {
-	testJson.email = req.params.email;
-	testJson.aa = req.query.aa;
-	res.json(testJson);
-});
+io.on('connection', function(socket){
+	console.log('made socket connection',socket.id);
 
-app.get('/dbtest/:user', (req, res) => {
-	let user = req.params.user;
-	// console.log(req.params);
-	let mydb = new Mydb(pool);
-	mydb.execute( conn =>{
-		conn.query("select * from user where user=?", [user], (err, ret) => {
-			res.json(ret);
-		})
-	})
-});
+	socket.on('chat',function(data){
+		io.sockets.emit('chat', data);
+	});
 
-const server = app.listen(3000, function(){
-	console.log("Express's started on port 3000");
-});
-
-const io = require('socket.io')(server, {
-	log: false,
-	origins: '*:*',
-	pingInterval: 3000,
-	pingTimeout: 5000
+	socket.on('typing',function(data){
+		socket.broadcast.emit('typing', data);
+	});
 });
