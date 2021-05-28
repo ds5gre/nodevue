@@ -29,6 +29,10 @@
     "hashmap": "^2.4.0",
     "mysql": "^2.18.1",
     "open-graph-scraper": "^4.8.2",
-    "socket.io": "^4.1.2"
+    "socket.io": "^4.1.2",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "webpack-node-externals": "^3.0.0"
   }
 }
