@@ -3,12 +3,61 @@
     <head>
         <meta charset="UTF-8">
         <title>ChatClient</title>
+        <style>
+            .red { color: red; }
+        </style>
     </head>
     <body>
-        <h1>Chat Client</h1>
+        <h1>Chat Client<strong id="myid" class="red"></strong></h1>
 
+        <div id="status" class="red"></div>
 
+        <div id="list">
 
+        </div>
+        <div>
+            <input type="text" id="msg" value="hi~">
+            <button onclick="send()" id="btnSend">Send</button>
+        </div>
 
+        <script
+        src="https://code.jquery.com/jquery-3.6.0.js"
+        integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+        crossorigin="anonymous"></script>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            var joinedRoom = null;
+            var socket = io('http://localhost:3000?aaa=123');
+
+            socket.on('connect', function(){
+                console.log("connected!!");
+
+            });
+
+            socket.on('message', function(data){
+                console.log("message>>", data);
+                //화면에 붉은색으로 RoomID를 표시
+                let msg = data.msg;
+                if (msg && msg.startsWith('Welcome ')){
+                    let myid = msg.substring(msg.lastIndexOf(' ') + 1);
+                    $('#myid').text(myid);
+                }
+            });
+
+            socket.on('disconnect', function(){
+                console.log("disconnected!!");
+            });
+
+            function send(){
+                console.log("function is called!!");
+                let msg = $('#msg').val();
+                socket.emit('message', {room: joinedRoom, msg: msg}, function(ret){
+                    console.log("message.callback>>", ret);
+
+                });
+
+            }
+        </script>
     </body>
 </html>

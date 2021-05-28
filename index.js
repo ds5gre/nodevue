@@ -50,6 +50,8 @@ const io = require('socket.io')(server, {
 io.sockets.on('connection', (socket, opt) => {
 	socket.emit('message', {msg: 'Welcome ' + socket.id});
 
+	console.log("connection>>", socket.id, socket.handshake.query);
+
 	socket.on('join', function(roomId, fn) {
 		socket.join(roomId, function(){
 			console.log("Join", roomId, Object.keys(socket.rooms));
@@ -62,6 +64,8 @@ io.sockets.on('connection', (socket, opt) => {
 
 	socket.on('message', (data, fn) => {
 		console.log("message>>", data.msg, Object.keys(socket.rooms));
+
+		fn(data.msg);
 	});
 
 	socket.on('disconnecting', function(roomId, fn) {
